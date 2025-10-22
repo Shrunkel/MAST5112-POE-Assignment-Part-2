@@ -8,7 +8,6 @@ import {
   ImageBackground,
   Image,
   ScrollView,
-  SafeAreaView,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { Ionicons } from "@expo/vector-icons";
@@ -69,149 +68,145 @@ export default function App() {
     setMenu([]);
   };
 
-  // Group dishes by course
+  // Group and sort menu by course order
   const groupedMenu = filteredMenu.reduce((acc: any, item) => {
     if (!acc[item.course]) acc[item.course] = [];
     acc[item.course].push(item);
     return acc;
   }, {} as Record<string, any[]>);
-
-  // Sort courses according to predefined order
   const sortedCourses = courseOrder.filter((c) => groupedMenu[c]);
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#800000" }}>
-      <ImageBackground
-        source={require("./assets/whiteMarble.jpg")}
-        resizeMode="cover"
-        style={styles.background}
-      >
-        {/* HEADER */}
-        <View style={styles.header}>
-          <View style={styles.headerLeft}>
-            <TouchableOpacity>
-              <Ionicons name="arrow-back" size={26} color="white" />
-            </TouchableOpacity>
-            <Image
-              source={require("./assets/cookLogo.png")}
-              style={styles.logo}
-            />
-          </View>
-          <Text style={styles.headerText}>Preset Menu</Text>
-          <View style={{ width: 40 }} />
+    <ImageBackground
+      source={require("./assets/whiteMarble.jpg")}
+      style={styles.background}
+    >
+      {/* HEADER */}
+      <View style={styles.header}>
+        <View style={styles.headerLeft}>
+          <TouchableOpacity>
+            <Ionicons name="arrow-back" size={26} color="white" />
+          </TouchableOpacity>
+          <Image
+            source={require("./assets/cookLogo.png")}
+            style={styles.logo}
+          />
         </View>
+        <Text style={styles.headerText}>Preset Menu</Text>
+        <View style={{ width: 40 }} />
+      </View>
 
-        {/* MENU DISPLAY */}
-        <ScrollView style={styles.menuContainer}>
-          {sortedCourses.length === 0 ? (
-            <Text style={styles.emptyText}>No dishes added yet.</Text>
-          ) : (
-            sortedCourses.map((courseName) => (
-              <View key={courseName} style={{ marginBottom: 16 }}>
-                <Text style={styles.courseTitle}>{courseName}</Text>
-                {groupedMenu[courseName].map((dish) => (
-                  <View key={dish.id} style={styles.dishItem}>
-                    <Text style={styles.dishName}>{dish.name}</Text>
-                    {dish.description ? (
-                      <Text style={styles.dishDesc}>{dish.description}</Text>
-                    ) : null}
-                    <Text style={styles.dishPrice}>{dish.price}</Text>
-                  </View>
-                ))}
-              </View>
-            ))
-          )}
-        </ScrollView>
-
-        {/* FORM */}
-        <View style={styles.formContainer}>
-          <Text style={styles.sectionTitle}>Add a New Dish</Text>
-
-          <View style={styles.inputContainer}>
-            <Ionicons
-              name="search"
-              size={18}
-              color="#777"
-              style={{ marginRight: 6 }}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Search existing dishes..."
-              value={searchQuery}
-              onChangeText={setSearchQuery}
-            />
-          </View>
-
-          <TextInput
-            style={styles.input}
-            placeholder="Dish Name"
-            value={dishName}
-            onChangeText={setDishName}
-          />
-
-          <TextInput
-            style={styles.input}
-            placeholder="Dish Description"
-            value={description}
-            onChangeText={setDescription}
-          />
-
-          <TextInput
-            style={styles.input}
-            placeholder="Price (R)"
-            keyboardType="numeric"
-            value={price}
-            onChangeText={setPrice}
-          />
-
-          <View style={styles.pickerContainer}>
-            <Picker
-              selectedValue={course}
-              style={styles.picker}
-              onValueChange={(itemValue) => setCourse(itemValue)}
-            >
-              {courseOrder.map((c) => (
-                <Picker.Item key={c} label={c} value={c} />
+      {/* MENU DISPLAY */}
+      <ScrollView style={styles.menuContainer}>
+        {sortedCourses.length === 0 ? (
+          <Text style={styles.emptyText}>No dishes found.</Text>
+        ) : (
+          sortedCourses.map((courseName) => (
+            <View key={courseName} style={{ marginBottom: 16 }}>
+              <Text style={styles.courseTitle}>{courseName}</Text>
+              {groupedMenu[courseName].map((dish) => (
+                <View key={dish.id} style={styles.dishItem}>
+                  <Text style={styles.dishName}>{dish.name}</Text>
+                  {dish.description ? (
+                    <Text style={styles.dishDesc}>{dish.description}</Text>
+                  ) : null}
+                  <Text style={styles.dishPrice}>{dish.price}</Text>
+                </View>
               ))}
-            </Picker>
-          </View>
+            </View>
+          ))
+        )}
+      </ScrollView>
 
-          <View style={styles.buttonRow}>
-            <TouchableOpacity
-              style={[styles.textButton, { backgroundColor: "#D4AF37" }]}
-              onPress={handleSave}
-            >
-              <Text style={styles.buttonText}>Save</Text>
-            </TouchableOpacity>
+      {/* FORM */}
+      <View style={styles.formContainer}>
+        <Text style={styles.sectionTitle}>Add a New Dish</Text>
 
-            <TouchableOpacity
-              style={[styles.textButton, { backgroundColor: "#A0522D" }]}
-              onPress={handleReset}
-            >
-              <Text style={styles.buttonText}>Clear</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={[styles.textButton, { backgroundColor: "#800000" }]}
-              onPress={handleDelete}
-            >
-              <Text style={styles.buttonText}>Delete</Text>
-            </TouchableOpacity>
-          </View>
+        <View style={styles.inputContainer}>
+          <Ionicons
+            name="search"
+            size={18}
+            color="#777"
+            style={{ marginRight: 6 }}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Search existing dishes..."
+            value={searchQuery}
+            onChangeText={setSearchQuery}
+          />
         </View>
 
-        {/* FOOTER */}
-        <View style={styles.footer}>
-          <Text style={styles.footerText}>© 2025 Your Restaurant</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Dish Name"
+          value={dishName}
+          onChangeText={setDishName}
+        />
+
+        <TextInput
+          style={styles.input}
+          placeholder="Dish Description"
+          value={description}
+          onChangeText={setDescription}
+        />
+
+        <TextInput
+          style={styles.input}
+          placeholder="Price (R)"
+          keyboardType="numeric"
+          value={price}
+          onChangeText={setPrice}
+        />
+
+        <View style={styles.pickerContainer}>
+          <Picker
+            selectedValue={course}
+            style={styles.picker}
+            onValueChange={(itemValue) => setCourse(itemValue)}
+          >
+            {courseOrder.map((c) => (
+              <Picker.Item key={c} label={c} value={c} />
+            ))}
+          </Picker>
         </View>
-      </ImageBackground>
-    </SafeAreaView>
+
+        <View style={styles.buttonRow}>
+          <TouchableOpacity
+            style={[styles.textButton, { backgroundColor: "#D4AF37" }]}
+            onPress={handleSave}
+          >
+            <Text style={styles.buttonText}>Save</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[styles.textButton, { backgroundColor: "#A0522D" }]}
+            onPress={handleReset}
+          >
+            <Text style={styles.buttonText}>Clear</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[styles.textButton, { backgroundColor: "#800000" }]}
+            onPress={handleDelete}
+          >
+            <Text style={styles.buttonText}>Delete</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+
+      {/* FOOTER */}
+      <View style={styles.footer}>
+        <Text style={styles.footerText}>© 2025 Your Restaurant</Text>
+      </View>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
   background: {
     flex: 1,
+    resizeMode: "cover",
     justifyContent: "space-between",
   },
   header: {
@@ -240,7 +235,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   menuContainer: {
-    backgroundColor: "rgba(245,245,245,0.9)",
+    backgroundColor: "#1c1c1c", // black-ish background
     margin: 16,
     borderRadius: 20,
     padding: 12,
@@ -254,19 +249,20 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   dishItem: {
-    backgroundColor: "white",
+    backgroundColor: "#f7f7f7",
     borderRadius: 12,
     padding: 10,
     marginBottom: 6,
     shadowColor: "#000",
-    shadowOpacity: 0.05,
+    shadowOpacity: 0.1,
     shadowOffset: { width: 0, height: 1 },
     shadowRadius: 2,
-    elevation: 1,
+    elevation: 2,
   },
   dishName: {
     fontWeight: "bold",
     fontSize: 16,
+    color: "#333",
   },
   dishDesc: {
     color: "#555",
@@ -337,7 +333,7 @@ const styles = StyleSheet.create({
   },
   emptyText: {
     textAlign: "center",
-    color: "#777",
+    color: "white",
   },
   footer: {
     backgroundColor: "#800000",
