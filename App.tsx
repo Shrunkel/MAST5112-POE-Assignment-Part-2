@@ -280,11 +280,11 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   menuContainer: {
-    backgroundColor: "#1c1c1c",
-    margin: 16,
-    borderRadius: 20,
-    padding: 12,
-    maxHeight: 300,
+  backgroundColor: "#1c1c1c",
+  margin: 16,
+  borderRadius: 20,
+  padding: 12,
+  // maxHeight: 300,  <-- remove this
   },
   courseTitle: {
     fontSize: 18,
