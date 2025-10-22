@@ -9,8 +9,14 @@ Github Repository:
 https://github.com/Shrunkel/MAST5112-POE-Assignment-Part-2
 
 Reasons as to why a personal repository was used.
+
+<img width="573" height="287" alt="image" src="https://github.com/user-attachments/assets/ab661404-1d4f-419e-bb6f-caaccac76cd2" />
+
  
 This is happening again 
+
+<img width="702" height="84" alt="image" src="https://github.com/user-attachments/assets/08513f66-01e7-452b-a336-7f6d8f786276" />
+
  
 And the repository is set to public. I do apologize for the inconvenience
 Youtube video link:
@@ -26,15 +32,18 @@ Screenshots of the app
 
  
 
+ <img width="342" height="614" alt="image" src="https://github.com/user-attachments/assets/2caa24bf-39a0-4715-88f3-9e74d39283ed" />
+
  
- 
+
+
+
+<img width="360" height="636" alt="image" src="https://github.com/user-attachments/assets/29ddb759-1061-4673-8206-654d3ab4745d" />
 
 
 
 
-
-
-
+<img width="334" height="596" alt="image" src="https://github.com/user-attachments/assets/05dd8e3a-a8c4-4d53-a6fc-348891431f33" />
 
 
 
@@ -69,7 +78,8 @@ References
 
 React-Native, 2025. React native components. [online] Available at: < https://reactnative.dev/docs/flatlist> [Accessed 4 September 2025].
 
- 
+ <img width="781" height="781" alt="image" src="https://github.com/user-attachments/assets/fbe41b38-49a0-4538-a64f-d9747a637cb7" />
+
 VSJ Global, 2025. Restaurant Logo Design [image online]. Available at: < https://za.pinterest.com/pin/352477108355592064> [Accessed 2 September 2025]
 
 POE Document Mast 5112: Sharepoint.com. (2025). Redirecting. [online] Available at: https://advtechonline.sharepoint.com/:w:/r/sites/TertiaryStudents/_layouts/15/Doc.aspx?sourcedoc=%7B0358D574-E8A9-48D7-A374-45CD8B440339%7D&file=MAST5112POE.docx&action=default&mobileredirect=true.
