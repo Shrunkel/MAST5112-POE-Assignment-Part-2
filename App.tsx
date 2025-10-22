@@ -20,7 +20,6 @@ export default function App() {
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [course, setCourse] = useState("Hors d'oeuvres");
-  const [searchQuery, setSearchQuery] = useState("");
   const [menu, setMenu] = useState<any[]>([]);
   const [pickerVisible, setPickerVisible] = useState(false);
 
@@ -38,12 +37,6 @@ export default function App() {
     "Dessert",
     "Mignardise",
   ];
-
-  const filteredMenu = menu.filter(
-    (item) =>
-      item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.course.toLowerCase().includes(searchQuery.toLowerCase())
-  );
 
   const handleSave = () => {
     if (!dishName.trim() || !price.trim()) return;
@@ -68,12 +61,14 @@ export default function App() {
     setCourse("Hors d'oeuvres");
   };
 
+  // ✅ Changed: Delete only the last added dish
   const handleDelete = () => {
-    setMenu([]);
+    if (menu.length === 0) return;
+    setMenu(menu.slice(0, -1));
   };
 
   // Group and sort menu by course order
-  const groupedMenu = filteredMenu.reduce((acc: any, item) => {
+  const groupedMenu = menu.reduce((acc: any, item) => {
     if (!acc[item.course]) acc[item.course] = [];
     acc[item.course].push(item);
     return acc;
@@ -130,22 +125,6 @@ export default function App() {
           {/* FORM */}
           <View style={styles.formContainer}>
             <Text style={styles.sectionTitle}>Add a New Dish</Text>
-
-            <View style={styles.inputContainer}>
-              <Ionicons
-                name="search"
-                size={18}
-                color="#aaa"
-                style={{ marginRight: 6 }}
-              />
-              <TextInput
-                style={[styles.input, { flex: 1 }]}
-                placeholder="Search existing dishes..."
-                placeholderTextColor="#aaa"
-                value={searchQuery}
-                onChangeText={setSearchQuery}
-              />
-            </View>
 
             <TextInput
               style={styles.input}
@@ -280,11 +259,10 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   menuContainer: {
-  backgroundColor: "#1c1c1c",
-  margin: 16,
-  borderRadius: 20,
-  padding: 12,
-  // maxHeight: 300,  <-- remove this
+    backgroundColor: "#1c1c1c",
+    margin: 16,
+    borderRadius: 20,
+    padding: 12,
   },
   courseTitle: {
     fontSize: 18,
@@ -325,15 +303,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     color: "white",
     fontWeight: "600",
-  },
-  inputContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#000",
-    borderRadius: 10,
-    paddingHorizontal: 10,
-    marginBottom: 8,
-    height: 48,
   },
   input: {
     backgroundColor: "#000",
