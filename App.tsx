@@ -8,8 +8,11 @@ import {
   ImageBackground,
   Image,
   ScrollView,
+  KeyboardAvoidingView,
+  Platform,
+  Modal,
+  FlatList,
 } from "react-native";
-import { Picker } from "@react-native-picker/picker";
 import { Ionicons } from "@expo/vector-icons";
 
 export default function App() {
@@ -19,6 +22,7 @@ export default function App() {
   const [course, setCourse] = useState("Hors d'oeuvres");
   const [searchQuery, setSearchQuery] = useState("");
   const [menu, setMenu] = useState<any[]>([]);
+  const [pickerVisible, setPickerVisible] = useState(false);
 
   const courseOrder = [
     "Hors d'oeuvres",
@@ -96,114 +100,145 @@ export default function App() {
         <View style={{ width: 40 }} />
       </View>
 
-      {/* MENU DISPLAY */}
-      <ScrollView style={styles.menuContainer}>
-        {sortedCourses.length === 0 ? (
-          <Text style={styles.emptyText}>No dishes found.</Text>
-        ) : (
-          sortedCourses.map((courseName) => (
-            <View key={courseName} style={{ marginBottom: 16 }}>
-              <Text style={styles.courseTitle}>{courseName}</Text>
-              {groupedMenu[courseName].map((dish) => (
-                <View key={dish.id} style={styles.dishItem}>
-                  <Text style={styles.dishName}>{dish.name}</Text>
-                  {dish.description ? (
-                    <Text style={styles.dishDesc}>{dish.description}</Text>
-                  ) : null}
-                  <Text style={styles.dishPrice}>{dish.price}</Text>
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === "ios" ? "padding" : undefined}
+      >
+        <ScrollView>
+          {/* MENU DISPLAY */}
+          <View style={styles.menuContainer}>
+            {sortedCourses.length === 0 ? (
+              <Text style={styles.emptyText}>No dishes found.</Text>
+            ) : (
+              sortedCourses.map((courseName) => (
+                <View key={courseName} style={{ marginBottom: 16 }}>
+                  <Text style={styles.courseTitle}>{courseName}</Text>
+                  {groupedMenu[courseName].map((dish) => (
+                    <View key={dish.id} style={styles.dishItem}>
+                      <Text style={styles.dishName}>{dish.name}</Text>
+                      {dish.description ? (
+                        <Text style={styles.dishDesc}>{dish.description}</Text>
+                      ) : null}
+                      <Text style={styles.dishPrice}>{dish.price}</Text>
+                    </View>
+                  ))}
                 </View>
-              ))}
-            </View>
-          ))
-        )}
-      </ScrollView>
+              ))
+            )}
+          </View>
 
-      {/* FORM */}
-      <View style={styles.formContainer}>
-        <Text style={styles.sectionTitle}>Add a New Dish</Text>
+          {/* FORM */}
+          <View style={styles.formContainer}>
+            <Text style={styles.sectionTitle}>Add a New Dish</Text>
 
-        <View style={styles.inputContainer}>
-          <Ionicons
-            name="search"
-            size={18}
-            color="#aaa"
-            style={{ marginRight: 6 }}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Search existing dishes..."
-            placeholderTextColor="#aaa"
-            value={searchQuery}
-            onChangeText={setSearchQuery}
-          />
-        </View>
-
-        <TextInput
-          style={styles.input}
-          placeholder="Dish Name"
-          placeholderTextColor="#aaa"
-          value={dishName}
-          onChangeText={setDishName}
-        />
-
-        <TextInput
-          style={styles.input}
-          placeholder="Dish Description"
-          placeholderTextColor="#aaa"
-          value={description}
-          onChangeText={setDescription}
-        />
-
-        <TextInput
-          style={styles.input}
-          placeholder="Price (R)"
-          placeholderTextColor="#aaa"
-          keyboardType="numeric"
-          value={price}
-          onChangeText={setPrice}
-        />
-
-        <View style={styles.pickerContainer}>
-          <Picker
-            selectedValue={course}
-            style={styles.picker}
-            dropdownIconColor="white"
-            onValueChange={(itemValue) => setCourse(itemValue)}
-          >
-            {courseOrder.map((c) => (
-              <Picker.Item
-                key={c}
-                label={c}
-                value={c}
-                color="white"
+            <View style={styles.inputContainer}>
+              <Ionicons
+                name="search"
+                size={18}
+                color="#aaa"
+                style={{ marginRight: 6 }}
               />
-            ))}
-          </Picker>
-        </View>
+              <TextInput
+                style={[styles.input, { flex: 1 }]}
+                placeholder="Search existing dishes..."
+                placeholderTextColor="#aaa"
+                value={searchQuery}
+                onChangeText={setSearchQuery}
+              />
+            </View>
 
-        <View style={styles.buttonRow}>
-          <TouchableOpacity
-            style={[styles.textButton, { backgroundColor: "#D4AF37" }]}
-            onPress={handleSave}
-          >
-            <Text style={styles.buttonText}>Save</Text>
-          </TouchableOpacity>
+            <TextInput
+              style={styles.input}
+              placeholder="Dish"
+              placeholderTextColor="#aaa"
+              value={dishName}
+              onChangeText={setDishName}
+            />
 
-          <TouchableOpacity
-            style={[styles.textButton, { backgroundColor: "#A0522D" }]}
-            onPress={handleReset}
-          >
-            <Text style={styles.buttonText}>Clear</Text>
-          </TouchableOpacity>
+            <TextInput
+              style={[styles.input, styles.descriptionInput]}
+              placeholder="Dish description"
+              placeholderTextColor="#aaa"
+              value={description}
+              onChangeText={setDescription}
+              multiline
+              numberOfLines={3}
+            />
 
-          <TouchableOpacity
-            style={[styles.textButton, { backgroundColor: "#800000" }]}
-            onPress={handleDelete}
-          >
-            <Text style={styles.buttonText}>Delete</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+            <TextInput
+              style={styles.input}
+              placeholder="Price"
+              placeholderTextColor="#aaa"
+              keyboardType="numeric"
+              value={price}
+              onChangeText={setPrice}
+            />
+
+            {/* Custom Picker (Dark Modal) */}
+            <TouchableOpacity
+              style={styles.pickerButton}
+              onPress={() => setPickerVisible(true)}
+            >
+              <Text style={styles.pickerText}>{course}</Text>
+              <Ionicons name="chevron-down" size={20} color="white" />
+            </TouchableOpacity>
+
+            <Modal
+              transparent
+              visible={pickerVisible}
+              animationType="fade"
+              onRequestClose={() => setPickerVisible(false)}
+            >
+              <TouchableOpacity
+                style={styles.modalOverlay}
+                activeOpacity={1}
+                onPressOut={() => setPickerVisible(false)}
+              >
+                <View style={styles.modalContent}>
+                  <FlatList
+                    data={courseOrder}
+                    keyExtractor={(item) => item}
+                    renderItem={({ item }) => (
+                      <TouchableOpacity
+                        style={styles.modalItem}
+                        onPress={() => {
+                          setCourse(item);
+                          setPickerVisible(false);
+                        }}
+                      >
+                        <Text style={styles.modalItemText}>{item}</Text>
+                      </TouchableOpacity>
+                    )}
+                  />
+                </View>
+              </TouchableOpacity>
+            </Modal>
+
+            <View style={styles.buttonRow}>
+              <TouchableOpacity
+                style={[styles.textButton, { backgroundColor: "#D4AF37" }]}
+                onPress={handleSave}
+              >
+                <Text style={styles.buttonText}>Save</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={[styles.textButton, { backgroundColor: "#A0522D" }]}
+                onPress={handleReset}
+              >
+                <Text style={styles.buttonText}>Clear</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={[styles.textButton, { backgroundColor: "#800000" }]}
+                onPress={handleDelete}
+              >
+                <Text style={styles.buttonText}>Delete</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
 
       {/* FOOTER */}
       <View style={styles.footer}>
@@ -263,11 +298,6 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 10,
     marginBottom: 6,
-    shadowColor: "#000",
-    shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 1 },
-    shadowRadius: 2,
-    elevation: 2,
   },
   dishName: {
     fontWeight: "bold",
@@ -284,7 +314,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   formContainer: {
-    backgroundColor: "#2a2a2a", // dark grey background
+    backgroundColor: "#2a2a2a",
     margin: 16,
     borderRadius: 20,
     padding: 16,
@@ -299,27 +329,61 @@ const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#000", // black background for input
+    backgroundColor: "#000",
     borderRadius: 10,
     paddingHorizontal: 10,
     marginBottom: 8,
+    height: 48,
   },
   input: {
-    backgroundColor: "#000", // black
-    borderRadius: 10,
-    padding: 10,
-    marginBottom: 8,
-    flex: 1,
-    color: "white", // white text
-  },
-  pickerContainer: {
     backgroundColor: "#000",
     borderRadius: 10,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    height: 48,
+    marginBottom: 8,
+    color: "white",
+    fontSize: 16,
+  },
+  descriptionInput: {
+    height: 80,
+    textAlignVertical: "top",
+  },
+  pickerButton: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    backgroundColor: "#000",
+    borderRadius: 10,
+    paddingHorizontal: 12,
+    height: 48,
     marginBottom: 12,
   },
-  picker: {
-    width: "100%",
+  pickerText: {
     color: "white",
+    fontSize: 16,
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.6)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalContent: {
+    backgroundColor: "#1c1c1c",
+    width: "80%",
+    borderRadius: 12,
+    padding: 10,
+  },
+  modalItem: {
+    paddingVertical: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: "#333",
+  },
+  modalItemText: {
+    color: "white",
+    fontSize: 16,
+    textAlign: "center",
   },
   buttonRow: {
     flexDirection: "row",
@@ -332,11 +396,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingVertical: 12,
     alignItems: "center",
-    shadowColor: "#000",
-    shadowOpacity: 0.2,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 4,
-    elevation: 3,
   },
   buttonText: {
     color: "white",
