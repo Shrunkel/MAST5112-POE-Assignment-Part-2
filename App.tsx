@@ -126,12 +126,13 @@ export default function App() {
           <Ionicons
             name="search"
             size={18}
-            color="#777"
+            color="#aaa"
             style={{ marginRight: 6 }}
           />
           <TextInput
             style={styles.input}
             placeholder="Search existing dishes..."
+            placeholderTextColor="#aaa"
             value={searchQuery}
             onChangeText={setSearchQuery}
           />
@@ -140,6 +141,7 @@ export default function App() {
         <TextInput
           style={styles.input}
           placeholder="Dish Name"
+          placeholderTextColor="#aaa"
           value={dishName}
           onChangeText={setDishName}
         />
@@ -147,6 +149,7 @@ export default function App() {
         <TextInput
           style={styles.input}
           placeholder="Dish Description"
+          placeholderTextColor="#aaa"
           value={description}
           onChangeText={setDescription}
         />
@@ -154,6 +157,7 @@ export default function App() {
         <TextInput
           style={styles.input}
           placeholder="Price (R)"
+          placeholderTextColor="#aaa"
           keyboardType="numeric"
           value={price}
           onChangeText={setPrice}
@@ -163,10 +167,16 @@ export default function App() {
           <Picker
             selectedValue={course}
             style={styles.picker}
+            dropdownIconColor="white"
             onValueChange={(itemValue) => setCourse(itemValue)}
           >
             {courseOrder.map((c) => (
-              <Picker.Item key={c} label={c} value={c} />
+              <Picker.Item
+                key={c}
+                label={c}
+                value={c}
+                color="white"
+              />
             ))}
           </Picker>
         </View>
@@ -235,7 +245,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   menuContainer: {
-    backgroundColor: "#1c1c1c", // black-ish background
+    backgroundColor: "#1c1c1c",
     margin: 16,
     borderRadius: 20,
     padding: 12,
@@ -274,7 +284,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   formContainer: {
-    backgroundColor: "rgba(245,245,245,0.9)",
+    backgroundColor: "#2a2a2a", // dark grey background
     margin: 16,
     borderRadius: 20,
     padding: 16,
@@ -289,25 +299,27 @@ const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "white",
+    backgroundColor: "#000", // black background for input
     borderRadius: 10,
     paddingHorizontal: 10,
     marginBottom: 8,
   },
   input: {
-    backgroundColor: "white",
+    backgroundColor: "#000", // black
     borderRadius: 10,
     padding: 10,
     marginBottom: 8,
     flex: 1,
+    color: "white", // white text
   },
   pickerContainer: {
-    backgroundColor: "white",
+    backgroundColor: "#000",
     borderRadius: 10,
     marginBottom: 12,
   },
   picker: {
     width: "100%",
+    color: "white",
   },
   buttonRow: {
     flexDirection: "row",
